@@ -1,0 +1,45 @@
+---
+title: "Economic Connectedness"
+format: html
+execute:
+    echo: false
+---
+
+```{r}
+#| message = FALSE
+library(tidyverse)
+library(primer.data)
+```
+
+Opportunity Insights is a non-profit research and policy organization founded by economists Raj Chetty, John Friedman, and Nathaniel Hendren, with the mission to improve economic mobility and reduce inequality in the United States. The program leverages large-scale datasets to study the factors influencing upward mobility, such as neighborhood environments, education, and social connections. One of its key findings is the concept of "Economic Connectedness" (EC), which measures the degree of cross-class interaction and has been shown to strongly correlate with upward mobility. The organization's work often involves visualizing data, like the graph showing the relationship between county populations and EC, to highlight insights that can inform policy decisions. Opportunity Insights collaborates with policymakers, educators, and community leaders to translate research into actionable strategies aimed at expanding economic opportunity.
+
+
+```{r}
+connectedness |> 
+  drop_na() |> 
+  ggplot(aes(x = population)) +
+    geom_histogram(bins = 100) +
+    scale_x_log10(labels = scales::comma_format()) +
+    labs(title = "US County Populations in 2018",
+         subtitle = "Populations are highly skewed",
+         x = "Population",
+         y = "Number of Counties",
+         caption = "Opportunity Insights")
+```
+
+This scatter plot examines the relationship between US county population sizes and their Economic Connectedness (EC) scores, revealing that population size has virtually no impact on economic connectedness. The data points, representing individual counties, are distributed across a wide range of populations (from about 1,000 to 10 million residents, shown on a logarithmic scale) and EC values (roughly 0.25 to 1.35). The nearly horizontal blue regression line confirms the subtitle's assertion—there is essentially no correlation between a county's population and its level of economic connectedness. This finding suggests that both small rural counties and large urban counties can achieve similar levels of economic integration and social capital, indicating that factors other than sheer population size drive economic connectedness in American communities.
+
+
+```{r}
+connectedness |> 
+  drop_na() |> 
+  ggplot(aes(x = population, y = connectedness)) +
+    geom_point() +
+    geom_smooth(method = "lm", formula = y ~ x, se = FALSE) +
+    scale_x_log10(labels = scales::comma_format()) +
+    labs(title = "US County Populations versus Economic Connectedness",
+         subtitle = "Population size does not matter to EC",
+         x = "Population",
+         y = "Economic Connectedness",
+         caption = "Opportunity Insights")
+```
